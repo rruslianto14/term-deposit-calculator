@@ -42,6 +42,7 @@ Therefore, I decided to make a simple frontend app which takes 4 user inputs and
 ## Assumptions
 
 - As we are calculating interest earned for a term deposit using standard, publically available formulas, I did not implement a backend for this application. If the calculation / formula required sensitive business logic or data (e.g. a business' secret formula for calculating a customer's credit rating), a backend would be implemented to securely complete the calculation.
+- The total balance and interest earned will be outputted to 2 decimal places. 
 - Based off the Bendigo Bank term deposit calculator, for this Term Deposit Calculator app:
   - There is a minimum and maximum `Deposit Amount` of $1,000 and $1,500,000 respectively.
   - There is a minimum and maximum `Interest rate` of 0% and 15% respectively.

@@ -34,6 +34,7 @@ type FormFields = InferType<typeof schema>;
 
 const TermDepositCalc = () => {
   const [totalBalance, setTotalBalance] = useState(0);
+  const [totalInterestEarned, setTotalInterestEarned] = useState(0);
 
   const {
     control,
@@ -82,6 +83,7 @@ const TermDepositCalc = () => {
     }
 
     setTotalBalance(totalInterest);
+    setTotalInterestEarned(totalInterest - depositAmount);
   }, [
     depositAmount,
     interestRate,
@@ -97,7 +99,7 @@ const TermDepositCalc = () => {
           <h1 className="text-4xl font-bold tracking-tight text-slate-200 sm:text-5xl">
             Term Deposit Calculator
           </h1>
-          <p className="mt-3 text-lg font-medium tracking-tight text-slate-200 sm:text-xl">
+          <p className="mt-3 text-lg font-medium tracking-tight sm:text-xl">
             Use our term deposit calculator to calculate how much interest you
             could earn using a term deposit.
           </p>
@@ -130,10 +132,10 @@ const TermDepositCalc = () => {
                     max={1500000}
                     precision={0}
                   >
-                    <NumberInputField />
+                    <NumberInputField data-testid="depositAmountInput" />
                   </NumberInput>
 
-                  <FormErrorMessage>
+                  <FormErrorMessage role="alert">
                     {errors.depositAmount &&
                       errors.depositAmount.message?.toString()}
                   </FormErrorMessage>
@@ -163,10 +165,10 @@ const TermDepositCalc = () => {
                     max={15}
                     precision={2}
                   >
-                    <NumberInputField />
+                    <NumberInputField data-testid="interestRateInput" />
                   </NumberInput>
 
-                  <FormErrorMessage>
+                  <FormErrorMessage role="alert">
                     {errors.interestRate &&
                       errors.interestRate.message?.toString()}
                   </FormErrorMessage>
@@ -197,10 +199,10 @@ const TermDepositCalc = () => {
                     max={60}
                     precision={0}
                   >
-                    <NumberInputField />
+                    <NumberInputField data-testid="investmentTermInput" />
                   </NumberInput>
 
-                  <FormErrorMessage>
+                  <FormErrorMessage role="alert">
                     {errors.investmentTerm &&
                       errors.investmentTerm.message?.toString()}
                   </FormErrorMessage>
@@ -224,7 +226,11 @@ const TermDepositCalc = () => {
                     </Tooltip>
                   </FormLabel>
 
-                  <Select onChange={onChange} value={value}>
+                  <Select
+                    onChange={onChange}
+                    value={value}
+                    data-testid="interestPaidFrequencyInput"
+                  >
                     {interestPaidFrequencies.map((interestPaid) => (
                       <option
                         value={interestPaid.frequency}
@@ -245,18 +251,19 @@ const TermDepositCalc = () => {
           </form>
         </div>
       </div>
-      <div
-        style={{ backgroundColor: "blue" }}
-        className="pt-8 px-4 lg:w-1/2 lg:py-36"
-      >
-        <div
-          className="flex flex-col items-center"
-          style={{ backgroundColor: "yellow" }}
-        >
-          <h3 className="text-2xl font-bold">
+      <div className="pt-8 px-4 lg:w-1/2 lg:py-36">
+        <div className="flex flex-col items-center">
+          <h3
+            style={{ color: "rgba(255,122,100,255)" }}
+            className="mt-4 mb-1 text-2xl font-bold"
+          >
             Term Deposit Total balance at maturity
           </h3>
-          <p className=" text-6xl my-3">
+          <p
+            style={{ color: "rgba(255,239,107,255)" }}
+            className=" text-6xl my-3"
+            data-testid="totalBalanceOutput"
+          >
             $
             {Object.keys(errors).length !== 0
               ? "-"
@@ -265,13 +272,18 @@ const TermDepositCalc = () => {
                   maximumFractionDigits: 2,
                 })}
           </p>
-          <hr style={{ borderTop: "3px solid #bbb", width: "80%" }} />
-          <h4 className="text-xl font-bold">Total interest earned</h4>
-          <p className=" text-3xl">
+          <hr className="mt-4 mb-4" style={{ borderTop: "3px solid #bbb", width: "80%" }} />
+          <h4
+            style={{ color: "rgba(255,122,100,255)" }}
+            className="mt-4 mb-1 text-xl font-bold"
+          >
+            Total interest earned
+          </h4>
+          <p style={{ color: "rgba(255,239,107,255)" }} className=" text-3xl">
             $
             {Object.keys(errors).length !== 0
               ? "-"
-              : totalBalance.toLocaleString(undefined, {
+              : totalInterestEarned.toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
